@@ -1,0 +1,37 @@
+---
+title: 要弄懂矩阵运算，需要哪些概念、它们怎么连？　（橙 = 先学　蓝 = 主线　灰虚线 = 支线，今天不展开　★ = 盲点）
+---
+flowchart LR
+  subgraph PRE[前置基础（先学）]
+    K1[向量运算<br/>加法 / 数乘 / 点积]
+    K2[线性变换]
+    K3[★ 基向量]
+  end
+  subgraph MAIN[主线：矩阵运算]
+    K4[矩阵]
+    K5[矩阵 × 向量]
+    K6[矩阵 × 矩阵]
+    K7[★ 变换复合<br/>从右往左做]
+    K8[交换律]
+    K9[逆矩阵<br/>撤销变换]
+  end
+  K10[支线：MVP 变换]
+  K11[支线：齐次坐标]
+  K12[支线：行列式]
+  K2 -- 用矩阵表示 --> K4
+  K3 -- 变换后的位置组成列 --> K4
+  K1 -- 是基本操作 --> K5
+  K4 -- 作用到向量上 --> K5
+  K4 -- 求逆得到 --> K9
+  K5 -- 推广为 --> K6
+  K6 -- 表示 --> K7
+  K6 -- 不满足 --> K8
+  K6 -- 串起三步 --> K10
+  K5 -- 想表示平移需要 --> K11
+  K4 -- 算出缩放倍数 --> K12
+  classDef prereq fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+  classDef main fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+  classDef side fill:#f5f5f5,stroke:#9e9e9e,color:#757575,stroke-dasharray:4 3
+  class K1,K2,K3 prereq
+  class K4,K5,K6,K7,K8,K9 main
+  class K10,K11,K12 side
