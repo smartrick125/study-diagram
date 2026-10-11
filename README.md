@@ -2,6 +2,8 @@
 
 [中文](#中文) | [English](#english)
 
+欢迎大家一起来优化这个流程，见[欢迎一起优化](#欢迎一起优化)。Everyone is welcome to help improve this workflow. See [Help improve it](#help-improve-it).
+
 ![矩阵运算学前地图](tests/01-矩阵运算学前地图.png)
 
 ## 中文
@@ -89,6 +91,14 @@ skill 有 5 个模块。用户不用记模块名，按平时的说法提出要�
 ├─ tests/               样例源码和期望要点，改完重画对照
 └─ scripts/检查.ps1      检查行数、模块目录和模块格式
 ```
+
+### 欢迎一起优化
+
+这个流程还在不断改进，欢迎大家一起来优化。
+
+- **提 Issue**：哪张图漏了知识点、画错了，或者连线看不清，把截图和你说的那句话贴到 [Issues](https://github.com/smartrick125/study-diagram/issues)。
+- **分享做法**：你知道哪个项目或方法画学习图画得好，也欢迎发 Issue 推荐，我们会记进 [docs/借鉴记录.md](docs/借鉴记录.md)。
+- **提 PR**：改 skill 前先读 [AGENTS.md](AGENTS.md)。新模块要先调研，改完重画 `tests/` 里的样例，并让 `scripts/检查.ps1` 全部通过。
 
 ### 接下来
 
@@ -179,6 +189,14 @@ To test the install, tell your AI "Today I want to learn matrix operations, draw
 ├─ tests/               Sample sources and expected points, re-rendered after each change
 └─ scripts/检查.ps1      Checks line counts, the module list, and module format
 ```
+
+### Help improve it
+
+This workflow is still evolving, and everyone is welcome to help improve it.
+
+- **Open an issue**: If a diagram missed a concept, got a fact wrong, or has lines that are hard to follow, post a screenshot and the sentence you said in [Issues](https://github.com/smartrick125/study-diagram/issues).
+- **Share a method**: If you know a project or method that draws good study diagrams, recommend it in an issue. We record what we borrow in [docs/借鉴记录.md](docs/借鉴记录.md).
+- **Send a pull request**: Read [AGENTS.md](AGENTS.md) before you change the skill. A new module needs research first. After a change, re-render the samples in `tests/` and make `scripts/检查.ps1` pass.
 
 ### What comes next
 
