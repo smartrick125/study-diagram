@@ -10,8 +10,10 @@
 
 `study-diagram` 是一个 AI skill。它把对话里讲过的知识画成图，回答学习时最常卡住的两个问题：
 
-- **路线**：要学懂它，还得先懂哪些？有哪些没听过的环节？
-- **顺序**：这些知识点在实际过程中按什么先后发生？
+- **路线**：学习路径往哪个方向走？要学懂它，还得先懂哪些？有哪些没听过的环节？每个部分占多大分量，哪些是重点要先学的基础，哪些是今天可以先放一放的支线？
+- **顺序**：这些知识点在实际过程中按什么先后发生？工程知识尤其需要这一点，比如渲染里一帧画面从提交到显示，每一步的前后逻辑。
+
+它不只用于数学，各种类型的知识都能用。作者目前用它学习渲染、数学、AI agent 自动化搭建和英语。skill 按模块组织，可以继续加新模块，也可以给新学科加一份易错点文件（见下方「功能」）。
 
 Claude Code、Codex、Antigravity 都能读这个 skill，Grok 和 Cursor 读 Claude 的目录。当前版本 v0.3。
 
@@ -55,6 +57,8 @@ skill 有 5 个模块。用户不用记模块名，按平时的说法提出要�
 2. 写 mermaid 或 matplotlib 源码，渲染成 PNG。
 3. 打开 PNG 检查文字截断、连线缠绕、标签压线，有问题就改了重画。
 4. 拿编号清单逐条核对。放不进主线的知识点放进「待关联」区，不丢掉。
+
+按学科可以加易错点文件，放在 `skill/references/subjects/`。目前有渲染和数学两份，其他学科画过几张图后可以补上。
 
 另外两条规矩：
 
@@ -108,8 +112,10 @@ skill 有 5 个模块。用户不用记模块名，按平时的说法提出要�
 
 `study-diagram` is an AI skill. It turns what you learned in a conversation into diagrams that answer the two questions learners get stuck on most:
 
-- **Route**: What else do I need to know before I can understand this topic? Which steps have I never heard of?
-- **Order**: In what order do these concepts happen in the real process?
+- **Route**: Which direction should the learning path take? What else do I need to know before I can understand this topic? Which steps have I never heard of? How much weight does each part carry: which foundations come first, and which side topics can wait?
+- **Order**: In what order do these concepts happen in the real process? Engineering knowledge needs this most. In rendering, for example, you need the order of every step from submitting a frame to showing it on screen.
+
+It is not only for math. It works for any kind of knowledge. The author currently uses it to study rendering, math, building AI agent automation, and English. The skill is organized in modules, so you can add new modules, and you can add a file of common mistakes for a new subject (see "Features" below).
 
 Claude Code, Codex, and Antigravity read this skill. Grok and Cursor read it from the Claude directory. Current version: v0.3.
 
@@ -153,6 +159,8 @@ Every module follows the same steps:
 2. Write Mermaid or Matplotlib source and render it to PNG.
 3. Open the PNG and check for cut-off text, tangled lines, and labels on top of lines. Fix and render again if needed.
 4. Check the numbered list against the diagram, one item at a time. A concept that does not fit the main topic goes into a "to be linked" area instead of being dropped.
+
+You can add a common-mistakes file per subject in `skill/references/subjects/`. Rendering and math have one now. Other subjects can get one after a few diagrams.
 
 Two more rules:
 
