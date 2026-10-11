@@ -1,5 +1,11 @@
 # study-diagram：把学习内容画成图
 
+[中文](#中文) | [English](#english)
+
+![矩阵运算学前地图](tests/01-矩阵运算学前地图.png)
+
+## 中文
+
 `study-diagram` 是一个 AI skill。它把对话里讲过的知识画成图，回答学习时最常卡住的两个问题：
 
 - **路线**：要学懂它，还得先懂哪些？有哪些没听过的环节？
@@ -7,11 +13,9 @@
 
 Claude Code、Codex、Antigravity 都能读这个 skill，Grok 和 Cursor 读 Claude 的目录。当前版本 v0.3。
 
-![矩阵运算学前地图](tests/01-矩阵运算学前地图.png)
-
 上图是说一句「今天要学矩阵运算，先画个联系图」得到的学前地图。橙色是要先学的基础，蓝色是今天的主线，灰色虚线是今天不展开的支线，★ 是容易漏掉的盲点。
 
-## 由来
+### 由来
 
 这个 skill 来自一份 10 周学习计划。最早它只做两件事：把对话里讲清楚的知识画成图，核对已有的学习图。
 
@@ -21,7 +25,7 @@ Claude Code、Codex、Antigravity 都能读这个 skill，Grok 和 Cursor 读 Cl
 
 完整的原始想法见 [docs/核心想法.md](docs/核心想法.md)，每版改了什么见 [docs/变更日志.md](docs/变更日志.md)。
 
-## 目的
+### 目的
 
 主要目的是把零散的知识点串起来，并且不漏点。具体有三条：
 
@@ -31,7 +35,7 @@ Claude Code、Codex、Antigravity 都能读这个 skill，Grok 和 Cursor 读 Cl
 
 图要拿来反复复习，所以内容错一处比画得丑更糟。skill 先保证事实对，再保证图看得清。
 
-## 功能
+### 功能
 
 skill 有 5 个模块。用户不用记模块名，按平时的说法提出要求，AI 会选对应的模块。
 
@@ -57,7 +61,7 @@ skill 有 5 个模块。用户不用记模块名，按平时的说法提出要�
 
 关联图的画法借鉴了 LLMapper、Metacademy、Novak 概念图等项目，来源和取舍见 [docs/借鉴记录.md](docs/借鉴记录.md)。
 
-## 安装
+### 安装
 
 需要 Python 3、Chrome 或 Edge（渲染 mermaid，需要联网），画曲线还需要 `matplotlib`。
 
@@ -72,7 +76,7 @@ skill 有 5 个模块。用户不用记模块名，按平时的说法提出要�
 
 装好后，对 AI 说「今天要学矩阵运算，先画个联系图」，应该得到一张和上图结构相同的学前地图。
 
-## 仓库结构
+### 仓库结构
 
 ```text
 ├─ AGENTS.md            维护规则，任何 AI 改 skill 前都要读
@@ -86,6 +90,96 @@ skill 有 5 个模块。用户不用记模块名，按平时的说法提出要�
 └─ scripts/检查.ps1      检查行数、模块目录和模块格式
 ```
 
-## 接下来
+### 接下来
 
 候选模块有「下一步学什么」「一份数据出两种图」「跨天知识库」等，状态见 [docs/路线图.md](docs/路线图.md)。加新模块的流程见 [AGENTS.md](AGENTS.md) 第三节：先记想法，再调研至少 3 个类似项目，然后实现和验证。
+
+## English
+
+`study-diagram` is an AI skill. It turns what you learned in a conversation into diagrams that answer the two questions learners get stuck on most:
+
+- **Route**: What else do I need to know before I can understand this topic? Which steps have I never heard of?
+- **Order**: In what order do these concepts happen in the real process?
+
+Claude Code, Codex, and Antigravity read this skill. Grok and Cursor read it from the Claude directory. Current version: v0.3.
+
+The diagram at the top of this page is a pre-study map. It came from one sentence: "Today I want to learn matrix operations, draw me a map first." Orange boxes are prerequisites to learn first. Blue boxes are today's main topic. Gray dashed boxes are side topics that today's session does not expand. A ★ marks a blind spot that learners often miss.
+
+### Origin
+
+The skill started as part of a 10-week study plan. At first it did two things: draw diagrams of knowledge explained in a conversation, and check existing study diagrams for mistakes.
+
+After some use, sequence diagrams alone kept losing concepts. One sequence diagram took many rounds of fixes, and every round left a few points out. A sequence diagram answers "in what order" but not "what is missing". For example, while studying GPUs, the learner knew "driver → video memory" but did not know about the GPU copy engine in between. A step you have never heard of never shows up in a sequence diagram.
+
+So v0.2 added concept maps. Before studying, the skill draws a map of prerequisites, the main topic, side topics, and blind spots. Sequence diagrams come after, when needed. v0.3 split the skill into modules and wrote maintenance rules, so any AI can continue the work.
+
+The original ideas are in [docs/核心想法.md](docs/核心想法.md) and the version history is in [docs/变更日志.md](docs/变更日志.md). Both are in Chinese.
+
+### Purpose
+
+The main purpose is to connect scattered concepts without losing any of them. In detail:
+
+1. See the route before studying. The foundations of a topic matter most. Without vector operations and linear transformations, you cannot understand matrix operations.
+2. Separate the main topic from side topics. Every session follows a concrete plan, so the map stays focused on the day's main topic and does not grow too large.
+3. After studying, connect what you learned and fix it in order, so you can review it later.
+
+You will review these diagrams many times, so one wrong fact costs more than an ugly layout. The skill gets the facts right first, then makes the diagram readable.
+
+### Features
+
+The skill has five modules. You do not need to remember module names. Ask in your own words and the AI picks the module.
+
+| Module | What you say | What you get |
+|---|---|---|
+| Route: pre-study map | "Today I want to learn X", "Draw a map first" | Concept map with prerequisites, main topic, side topics, and blind spots |
+| Post-study links | "Connect what I learned today", "How are these related?" | Concept map that links scattered concepts |
+| Order: sequence or flow diagram | "Draw this process as a sequence diagram" | Mermaid sequence diagram or flowchart |
+| Check an existing diagram | "Is this diagram right?", "Fix what is wrong" | Corrected diagram with changed parts in red |
+| Function curves | "Plot this curve", "How does this parameter change the result?" | Matplotlib plot |
+
+Every module follows the same steps:
+
+1. Number each concept that goes on the diagram (K1, K2, and so on).
+2. Write Mermaid or Matplotlib source and render it to PNG.
+3. Open the PNG and check for cut-off text, tangled lines, and labels on top of lines. Fix and render again if needed.
+4. Check the numbered list against the diagram, one item at a time. A concept that does not fit the main topic goes into a "to be linked" area instead of being dropped.
+
+Two more rules:
+
+- The skill searches to confirm facts that go out of date, such as version numbers, default values, and hardware specs, before it draws them.
+- By default the skill only shows diagrams to you and saves nothing. It saves files only when you ask, to the location you name.
+
+The concept map method borrows from LLMapper, Metacademy, and Novak concept maps. Sources and trade-offs are in [docs/借鉴记录.md](docs/借鉴记录.md) (Chinese).
+
+### Install
+
+You need Python 3 and Chrome or Edge to render Mermaid, with an internet connection. Function curves also need `matplotlib`.
+
+1. Clone this repository.
+2. Link `skill/` into your AI's global skills directory. For Claude Code on Windows, run:
+
+	```bash
+	cmd /c mklink /J "%USERPROFILE%\.claude\skills\study-diagram" "<repo path>\skill"
+	```
+
+3. The render commands in `skill/SKILL.md` use the author's path `C:/Users/21265/.claude/skills/study-diagram/...`. Replace it with your own skills directory.
+
+To test the install, tell your AI "Today I want to learn matrix operations, draw me a map first." You should get a pre-study map with the same structure as the diagram above.
+
+### Repository layout
+
+```text
+├─ AGENTS.md            Maintenance rules. Every AI reads them before changing the skill
+├─ skill/               The skill itself
+│   ├─ SKILL.md         Main workflow and module list
+│   ├─ modules/         One file per module
+│   ├─ references/      Common mistakes by subject (rendering, math) and layout fixes
+│   └─ scripts/         render.py (Mermaid), plot.py (Matplotlib)
+├─ docs/                Core ideas, research notes, roadmap, changelog
+├─ tests/               Sample sources and expected points, re-rendered after each change
+└─ scripts/检查.ps1      Checks line counts, the module list, and module format
+```
+
+### What comes next
+
+Candidate modules include "what to learn next", "one data source for two diagram types", and "a knowledge base across days". Their status is in [docs/路线图.md](docs/路线图.md). The process for adding a module is in section 3 of [AGENTS.md](AGENTS.md): record the idea, study at least three similar projects, then build and verify.
