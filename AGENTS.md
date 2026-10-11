@@ -63,6 +63,7 @@
 - 提交信息格式：`[模块名] 做了什么（AI 名）`，例如 `[路线-学前地图] 支线不放 subgraph（Claude）`。
 - 提交后可以 push 到 origin（smartrick125/study-diagram）。
 - 新建仓库、改公开/私有、force push，必须用户同意。
+- GitHub 上的事（推送、处理别人提的 Issue 和 PR）由 Claude 负责。其他 AI 只在本地提交，不处理 Issue 和 PR。
 - 汇报状态分级，不笼统说「完成」：`已改文件` → `检查脚本通过` → `样例渲染并看图通过` → `用户确认`。
 
 ## 七、其他
