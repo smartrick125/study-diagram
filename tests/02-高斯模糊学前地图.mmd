@@ -1,0 +1,31 @@
+---
+title: 要弄懂这个项目的高斯模糊，需要哪些概念？　（橙 = 先学　蓝 = 主线　灰虚线 = 支线　★ = 盲点）
+---
+flowchart LR
+  subgraph PRE[前置基础（先学）]
+    K1[正态分布<br/>σ 标准差]
+    K2[卷积<br/>加权平均]
+    K3[★ 可分离<br/>二维拆成两次一维]
+  end
+  subgraph MAIN[主线：高斯模糊]
+    K4[高斯权重]
+    K5[通用：截断约 3σ<br/>常见惯例，如 OpenCV 8 位图]
+    K6[本项目：σ = 1，截断 2σ<br/>每方向采 5 次]
+    K7[★ 采样间距<br/>前提：_BlurSpread = 1]
+    K8[本项目：pass 数 = 2 + 2 × 迭代<br/>前提：迭代次数 ≥ 1]
+  end
+  K9[支线：Bloom 泛光]
+  K1 -- 决定形状 --> K4
+  K2 -- 是计算方式 --> K4
+  K3 -- 拆成纵、横两个 pass --> K8
+  K4 -- 理论上截断在 --> K5
+  K4 -- 本项目取值 --> K6
+  K5 -- 对比 --> K6
+  K6 -- 偏移乘上 --> K7
+  K8 -- 被复用于 --> K9
+  classDef prereq fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+  classDef main fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+  classDef side fill:#f5f5f5,stroke:#9e9e9e,color:#757575,stroke-dasharray:4 3
+  class K1,K2,K3 prereq
+  class K4,K5,K6,K7,K8 main
+  class K9 side
