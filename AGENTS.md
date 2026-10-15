@@ -66,6 +66,7 @@
 
 | 角色 | 负责的文件 | 不做 |
 |---|---|---|
+| Organizer [人员架构] | 不改仓库文件；管仓库外的协作区（成员间的沟通、交接），加、合并、删角色（合并、删前先问用户） | 改仓库文件、提交、push |
 | Builder [Skill本地维护] | `AGENTS.md`、`CLAUDE.md`、`.gitignore`、`.gitattributes`、`scripts/检查.ps1` | push |
 | Tuner [优化员] | `skill/`、`tests/`、`docs/核心想法.md`（只记用户原话）、`docs/借鉴记录.md`、`docs/路线图.md` | push；修没经查证的问题 |
 | Verifier [查证员] | 不改仓库里的任何文件，只查证、写报告 | 改文件、提交、push |
@@ -76,12 +77,13 @@
 
 ### 三条路线
 
-1. **修问题**：Verifier 复核反馈 → Tuner 修好后本地提交 → 用户看样例图 → Verifier 推送前检查 → Maintainer 推送。
-2. **新功能**：用户先同意 → Tuner 按第三节做（记想法、调研、借鉴记录、实现）→ Verifier 查来源、推送前检查 → Maintainer 推送。
+1. **修问题**：Verifier 复核反馈 → Tuner 修好，自己跑渲染和 `scripts/检查.ps1`、打开 PNG 看过，本地提交 → Verifier 推送前检查，不通过直接退回 Tuner → 全部通过后用户做最终验收 → Maintainer 推送。
+2. **新功能**：用户先同意 → Tuner 按第三节做（记想法、调研、借鉴记录、实现）→ 之后同路线 1：Verifier 查来源、推送前检查 → 最终验收 → Maintainer 推送。
 3. **别人在 GitHub 提的 Issue 和 PR**：Maintainer 接收、整理成报告；是问题走路线 1，是新功能走路线 2。在 GitHub 上回复、合并、关闭前先问用户。
 
 - 外面来的新想法（社交平台、聊天）先问用户，同意后再走路线 2。
-- 推送前检查里不用看图的部分（看 diff、找出处、跑 `scripts/检查.ps1`），Verifier 拿到就做；只有看 PNG 等用户。
+- 成员之间直接交接，中途不叫用户看图；用户只做最终验收：一次看完所有改过的 PNG 和检查结果，回「过了」才推送。
+- Verifier → Tuner → Verifier 算一轮，同一件事最多 3 轮。第 3 轮的结果不管过没过，都交给用户，写清情况（每轮改了什么、卡在哪）和解决办法（2～3 个选项，标出推荐的）。
 
 ### 其他
 
