@@ -14,7 +14,6 @@
   | `C:\Users\21265\.gemini\antigravity\skills\study-diagram` | Antigravity |
 
 - **只改 `skill/` 里的正本**。不要在任何全局 skills 目录里另建副本，也不要把链接换成实体文件夹。
-- `C:\Users\21265\Desktop\10Week\.claude\skills\study-diagram` 是 10Week 专用的旧版，**不动、不同步**。
 - SKILL.md 里的脚本路径写全局路径 `C:/Users/21265/.claude/skills/study-diagram/...`，不要改成本项目路径，这样项目搬家也不影响调用。
 
 ## 二、开工前
