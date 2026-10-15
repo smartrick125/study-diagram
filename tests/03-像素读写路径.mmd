@@ -1,21 +1,23 @@
 ---
-title: 一个像素读纹理、写 RT 各经过哪几层？　（标「NVIDIA」的只对 NVIDIA，其余各家通用）
+title: 一个像素读纹理、写 RT 各经过哪几层？　（按 NVIDIA 显卡画；标「通用」的各家都对）
 ---
 flowchart TD
   RAS[光栅化<br/>固定硬件，不在 SM 里]
-  EZ[提前深度测试<br/>前提：着色器没用 discard / clip]
+  EZ[① 提前深度测试<br/>前提：能提前，如没用 discard / clip]
   FS[片元着色器<br/>在 SM 里跑]
   TEX[纹理缓存<br/>每个 SM 一份，命中就不读显存]
-  LZ[输出合并 ①（通用）：深度测试<br/>前提：用了 discard / clip，没法提前]
-  ROP[输出合并 ②（通用）：混合、写 RT<br/>NVIDIA：由 ROP 执行，不在 SM 里]
+  LZ[② 输出合并（通用）：深度测试<br/>前提：不能提前，如用了 discard / clip]
+  ROP[输出合并（通用）：混合、写 RT<br/>NVIDIA：由 ROP 执行，不在 SM 里]
   L2[NVIDIA：L2<br/>全芯片共用一个]
   VRAM[(显存)]
-  RAS -- 能提前就先测 --> EZ
+  RAS -- ① 能提前 --> EZ
   EZ -- 通过的片元 --> FS
+  RAS -- ② 不能提前 --> FS
   FS -- 读：采样请求 --> TEX
   TEX -- 读：未命中才往下 --> L2
-  FS -- 写：颜色和深度 --> LZ
+  FS -- ② 写：颜色和深度 --> LZ
   LZ -- 通过 --> ROP
+  FS -- ① 写：已提前测过 --> ROP
   ROP -- 写：写回 --> L2
   L2 -- 读未命中 / 写回 --> VRAM
   classDef nv fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
