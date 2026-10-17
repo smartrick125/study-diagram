@@ -1,0 +1,29 @@
+---
+title: 要在 URP 里加一步自己的渲染，需要哪些概念？　（橙 = 先学　蓝 = 主线　灰虚线 = 支线　★ = 盲点）
+---
+flowchart LR
+  subgraph PRE[前置基础（先学）]
+    K1[渲染管线<br/>白话：把场景一步步画成屏幕像素的流程]
+    K2[Shader<br/>白话：在显卡上跑的小程序，算出颜色]
+    K3[★ SRP<br/>白话：让你用 C# 自己排渲染步骤的框架]
+  end
+  subgraph MAIN[主线：URP 自定义 Pass]
+    K4[URP<br/>白话：Unity 做好的一套现成渲染流程]
+    K5[Render Pass<br/>白话：流程里的一步，如画不透明物体]
+    K6[★ Scriptable Renderer Feature<br/>白话：把你写的那一步插进 URP 的插件]
+    K7[★ Render Graph<br/>白话：Unity 6 起写这一步的新方式<br/>前提：没开兼容模式]
+  end
+  K8[支线：HDRP<br/>白话：Unity 另一套偏高画质的现成流程]
+  K1 -- 能用 C# 脚本定制的叫 --> K3
+  K3 -- Unity 预先做好的一套 --> K4
+  K2 -- 在每一步里被调用 --> K5
+  K4 -- 由一个个组成 --> K5
+  K6 -- 把自定义的一步排进 --> K5
+  K7 -- 记录这一步要读写什么 --> K5
+  K4 -- 对比 --> K8
+  classDef prereq fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+  classDef main fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+  classDef side fill:#f5f5f5,stroke:#9e9e9e,color:#757575,stroke-dasharray:4 3
+  class K1,K2,K3 prereq
+  class K4,K5,K6,K7 main
+  class K8 side
