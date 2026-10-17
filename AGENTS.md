@@ -65,8 +65,7 @@
 
 | 角色 | 负责的文件 | 不做 |
 |---|---|---|
-| Organizer [人员架构] | 不改仓库文件；管仓库外的协作区（成员间的沟通、交接），加、合并、删角色（合并、删前先问用户） | 改仓库文件、提交、push |
-| Builder [Skill本地维护] | `AGENTS.md`、`CLAUDE.md`、`.gitignore`、`.gitattributes`、`scripts/检查.ps1` | push |
+| Organizer [人员架构] | 管理层：`AGENTS.md`、`CLAUDE.md`、`.gitignore`、`.gitattributes`、`scripts/检查.ps1`、三个全局入口链接；仓库外的协作区（成员间的沟通、交接）；加、合并、删角色（合并、删前先问用户）；成员卡住时协调 | 改 `skill/`、`tests/`；push |
 | Tuner [优化员] | `skill/`、`tests/`、`docs/核心想法.md`（只记用户原话）、`docs/借鉴记录.md`、`docs/路线图.md` | push；修没经查证的问题 |
 | Verifier [查证员] | 不改仓库里的任何文件，只查证、写报告 | 改文件、提交、push |
 | Maintainer [仓库管理员] | `README.md`；唯一能 push、处理 Issue 和 PR 的角色 | 上传没通过验证的内容 |
