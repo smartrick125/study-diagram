@@ -45,4 +45,12 @@ foreach ($s in Get-ChildItem -LiteralPath (Join-Path $root 'tests') -Filter *.mm
   Check (Test-Path -LiteralPath ($s.FullName -replace '\.mmd$', '.期望.md')) "tests/$($s.Name) 有期望要点"
 }
 
+# 6. 脚本测试：tests/test_*.py 逐个跑，退出码不是 0 就 FAIL（新测试放进去自动生效）
+$env:PYTHONIOENCODING = 'utf-8'
+foreach ($t in Get-ChildItem -LiteralPath (Join-Path $root 'tests') -Filter 'test_*.py') {
+  $out = & python $t.FullName 2>&1
+  $ok = $LASTEXITCODE -eq 0
+  Check $ok "tests/$($t.Name) $(if ($ok) { '通过' } else { '没通过：' + (($out | Select-Object -Last 3) -join ' / ') })"
+}
+
 if ($fail) { Write-Output "`n$fail 项未通过"; exit 1 } else { Write-Output "`n全部通过" }
