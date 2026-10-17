@@ -3,10 +3,13 @@
 Usage:
     python render.py <file.mmd> [<file2.mmd> ...] [--out DIR] [--scale 2]
 
-Each <name>.mmd becomes <name>.png (in --out, default: next to the .mmd).
+Each <name>.mmd becomes <name>.png in --out (an archive folder), or by default in the
+shared work folder <system temp>/study-diagram/, which drops files older than 7 days.
 Mermaid is loaded from cdn.jsdelivr.net, so the first run needs network.
 """
 import argparse, json, os, pathlib, re, subprocess, sys
+
+import workdir
 
 FONT = '"Microsoft YaHei", "PingFang SC", sans-serif'
 CANDIDATES = [
@@ -86,11 +89,11 @@ def main():
     ap.add_argument("--scale", type=float, default=2)
     a = ap.parse_args()
     browser = find_browser()
+    out = workdir.out_dir(a.out)
+    out.mkdir(parents=True, exist_ok=True)
     ok = True
     for f in a.files:
         mmd = pathlib.Path(f).resolve()
-        out = pathlib.Path(a.out).resolve() if a.out else mmd.parent
-        out.mkdir(parents=True, exist_ok=True)
         ok &= render(browser, mmd, out, a.scale)
     sys.exit(0 if ok else 1)
 

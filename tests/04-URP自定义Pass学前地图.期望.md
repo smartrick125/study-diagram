@@ -15,5 +15,5 @@
 ## 重画命令
 
 ```bash
-python C:/Users/21265/.claude/skills/study-diagram/scripts/render.py tests/04-URP自定义Pass学前地图.mmd --out temp
+python C:/Users/21265/.claude/skills/study-diagram/scripts/render.py tests/04-URP自定义Pass学前地图.mmd
 ```

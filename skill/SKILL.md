@@ -32,7 +32,7 @@ description: 【学习】学习图：学前地图 / 学后串联 / 时序图 / �
 
 1. **选模块**（上表）。
 2. **列知识点清单（防漏点，所有模块都做）**：把要上图的知识点逐条编号（K1、K2……），来源是对话、用户给的笔记或图片（学前地图则是学习计划 + 按主题补全）。清单按「讲过什么」列，不按「图里放得下什么」列。
-3. **按模块文件写源码**，先放 scratchpad，与图同名：图 `NN-标题.mmd` / `NN-标题.py`，关联图另有 `NN-标题.关系.md`。
+3. **按模块文件写源码**，先放临时图目录（见「渲染」），与图同名：图 `NN-标题.mmd` / `NN-标题.py`，关联图另有 `NN-标题.关系.md`。
 4. **渲染**（下方命令）。
 5. **看图验收**（不能跳过）。
 6. **存档**（只在用户要求时）。
@@ -53,13 +53,15 @@ description: 【学习】学习图：学前地图 / 学后串联 / 时序图 / �
 
 ```bash
 # 流程图 / 时序图 / 关联图：自动找 Chrome / Edge，从 jsdelivr 加载 mermaid（需要联网）
-python C:/Users/21265/.claude/skills/study-diagram/scripts/render.py 03-xxx.mmd --out <输出目录>
+python C:/Users/21265/.claude/skills/study-diagram/scripts/render.py 03-xxx.mmd
 
 # 曲线图：需要 matplotlib；脚本里已注入 plt、np、mark()、save()
-python C:/Users/21265/.claude/skills/study-diagram/scripts/plot.py 08-xxx.py --out <输出目录>
+python C:/Users/21265/.claude/skills/study-diagram/scripts/plot.py 08-xxx.py
 ```
 
-渲染到 scratchpad 里，并把图发给用户看。
+- **临时图目录**：系统临时目录下的 `study-diagram/`（Windows 是 `%TEMP%\study-diagram\`）。不给 `--out` 时 PNG 输出到这里，源码也写在这里，然后把图发给用户看。
+- **自动清理**：每次渲染先删掉这个目录里 7 天前的文件，不用手动清；子文件夹和给了 `--out` 的存档目录不动（实现在 `scripts/workdir.py`）。
+- 只有存档时才加 `--out <用户指定的目录>`。
 
 ## 看图验收（不能跳过）
 
@@ -75,7 +77,7 @@ python C:/Users/21265/.claude/skills/study-diagram/scripts/plot.py 08-xxx.py --o
 
 ## 存档（只在用户要求时）
 
-- **默认不存档**：图留在 scratchpad，发给用户看就结束。不要自己去找或新建图片文件夹。
+- **默认不存档**：图留在临时图目录，发给用户看就结束，7 天后自动删掉。不要自己去找或新建图片文件夹。
 - 用户说要存时，存到用户指定的位置；没说位置就问一句。PNG 和源码放一起（源码可放同级 `源码/` 子文件夹），文件名 `NN-标题`，NN 接着该文件夹现有最大序号往下编。存完列一遍文件夹，确认编号连续、源码齐全。
 
 ## 汇报格式

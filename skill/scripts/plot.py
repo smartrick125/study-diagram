@@ -8,7 +8,9 @@ A figure script is plain Python. These names are already defined for it:
     mark(ax, x, y, text, color, dx=40, dy=-50, guide=True)
                    dot + arrow annotation (+ dashed guide line down to y=0)
     save(fig)      writes <OUT>/<script stem>.png
-Keep the script in 源码/ next to the PNG so the figure can be edited later.
+<OUT> is --out (an archive folder) or by default the shared work folder
+<system temp>/study-diagram/, which drops files older than 7 days.
+When archiving, keep the script in 源码/ next to the PNG so it can be edited later.
 """
 import argparse, pathlib, runpy, sys
 
@@ -16,6 +18,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+
+import workdir
 
 plt.rcParams.update({
     "font.sans-serif": ["Microsoft YaHei", "Noto Sans SC", "SimHei", "PingFang SC", "DejaVu Sans"],
@@ -45,10 +49,10 @@ def main():
     ap.add_argument("--out")
     ap.add_argument("--dpi", type=int, default=200)
     a = ap.parse_args()
+    out = workdir.out_dir(a.out)
+    out.mkdir(parents=True, exist_ok=True)
     for f in a.files:
         script = pathlib.Path(f).resolve()
-        out = pathlib.Path(a.out).resolve() if a.out else script.parent
-        out.mkdir(parents=True, exist_ok=True)
         png = out / f"{script.stem}.png"
 
         def save(fig, _png=png):

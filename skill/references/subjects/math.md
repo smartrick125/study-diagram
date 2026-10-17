@@ -27,7 +27,7 @@ ax.legend(loc="upper left")
 save(fig)
 ```
 
-运行：`python C:/Users/21265/.claude/skills/study-diagram/scripts/plot.py NN-标题.py --out <输出目录>`
+运行：`python C:/Users/21265/.claude/skills/study-diagram/scripts/plot.py NN-标题.py`（存档时才加 `--out`，见 SKILL.md「渲染」）
 
 ## 画法规范（为什么）
 
