@@ -38,24 +38,30 @@ def main():
     try:
         claude = home / ".claude" / "skills" / "study-diagram"
         copy_of_skill(claude)                                    # 1. 必装入口被换成副本
-        cursor = home / ".cursor" / "skills" / "学习图"
-        copy_of_skill(cursor)                                    # 2. 别的 AI 装了改名的副本
+        renamed = home / ".claude" / "skills" / "学习图"
+        copy_of_skill(renamed)                                   # 2. 同目录里还有改过名的副本
+        cursor_copy = home / ".cursor" / "skills" / "学习图"
+        copy_of_skill(cursor_copy)                               # 3. 别的 AI 只装了改名的副本
+        cursor = home / ".cursor" / "skills" / "study-diagram"
         other = home / ".cursor" / "skills" / "别的skill"
         other.mkdir()
         (other / "SKILL.md").write_text("---\nname: other\n---\n", encoding="utf-8")
-        (home / ".codex").mkdir()                                # 3. Codex 装了但没有入口
+        (home / ".codex").mkdir()                                # 4. Codex 装了但没有入口
         codex = home / ".codex" / "skills" / "study-diagram"
+        (home / ".gemini").mkdir()                               # 5. 只装 Gemini CLI，没装 Antigravity
         links = [claude, cursor, codex]
 
         out = run(home, backup)
         for p in links:
             assert points_to_skill(p), f"{p} 没变成指向正本的链接\n{out}"
+        assert not renamed.exists() and not cursor_copy.exists(), "改名的副本该备份走、不再留链接"
         saved = list(backup.rglob("独有.txt"))
-        assert len(saved) == 2, f"副本没有备份：{saved}"                      # 4. 副本先备份再换
-        assert (other / "SKILL.md").exists() and not other.is_junction()    # 5. 别的 skill 不动
-        assert not (home / ".grok").exists(), "没装的 AI 不该建目录"          # 6. 没装的 AI 不碰
+        assert len(saved) == 3, f"副本没有全部备份：{saved}"                 # 6. 副本先备份再换
+        assert (other / "SKILL.md").exists() and not other.is_junction()    # 7. 别的 skill 不动
+        assert not (home / ".grok").exists(), "没装的 AI 不该建目录"          # 8. 没装的 AI 不碰
+        assert not (home / ".gemini" / "antigravity").exists(), "只装 Gemini CLI 时不该建 Antigravity 入口"
         again = run(home, backup)
-        assert "FIXED" not in again, f"重跑又改了东西：{again}"               # 7. 重跑结果不变
+        assert "FIXED" not in again and "备份" not in again, f"重跑又改了东西：{again}"  # 9. 重跑结果不变
         assert (SKILL / "SKILL.md").exists(), "正本不能被动到"
     finally:
         for p in links:                                          # 先拆链接，防止删临时目录时删到正本
@@ -64,7 +70,7 @@ def main():
         assert (SKILL / "SKILL.md").exists()
         import shutil
         shutil.rmtree(tmp, ignore_errors=True)
-    print("ok   同步入口 7 项通过")
+    print("ok   同步入口 9 项通过")
 
 
 if __name__ == "__main__":
