@@ -33,11 +33,13 @@ foreach ($m in $modules) {
   Check ($missing.Count -eq 0) "modules/$($m.Name) 格式完整$(if ($missing) { '，缺：' + ($missing -join '、') })"
 }
 
-# 4. 各 AI 的全局入口都指向本项目的正本
-$hash = (Get-FileHash -LiteralPath $skillMd).Hash
+# 4. 各 AI 的全局入口是指向本项目 skill/ 的链接（只比 SKILL.md 查不出「其他文件是旧的」副本）
+$skillFull = (Resolve-Path -LiteralPath $skill).Path
 foreach ($e in "$HOME\.claude\skills\study-diagram", "$HOME\.codex\skills\study-diagram", "$HOME\.gemini\antigravity\skills\study-diagram") {
-  $f = Join-Path $e 'SKILL.md'
-  Check ((Test-Path -LiteralPath $f) -and ((Get-FileHash -LiteralPath $f).Hash -eq $hash)) "入口 $e 指向正本"
+  $i = Get-Item -LiteralPath $e -Force -ErrorAction SilentlyContinue
+  $target = if ($i -and ($i.Attributes -band [IO.FileAttributes]::ReparsePoint)) { [string]($i.Target | Select-Object -First 1) }
+  $ok = $target -and ((Resolve-Path -LiteralPath $target -ErrorAction SilentlyContinue).Path -eq $skillFull)
+  Check $ok "入口 $e 是指向正本的链接$(if (-not $ok) { '，运行 scripts\同步入口.ps1 修复' })"
 }
 
 # 5. 每个测试样例都有期望要点
