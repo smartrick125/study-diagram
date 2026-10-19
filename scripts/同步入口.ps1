@@ -4,6 +4,7 @@
 #   改过名的副本、链接只备份 / 拆掉不重建；重复运行结果不变。备份默认在 %TEMP%\study-diagram-入口备份，留 7 天。
 #   先做防删空：正本是 git 仓库时，skill/SKILL.md 不见了、或 skill/ 里一半以上已提交的文件被删，
 #   就用 git 把被删的文件恢复成最新提交的样子（只恢复被删的，别的改动不动），并记日志。删得少当作正常删改，不恢复。
+#   skill/ 里有没跟踪的新文件时当作正在挪文件重构，只补回 SKILL.md。重构 skill/ 请用 git mv 或尽快提交。
 #   -Schedule：注册 Windows 定时任务「study-diagram 入口同步」，登录时跑一次，之后每小时跑一次。
 # 注意：本文件必须保存为 UTF-8 带 BOM，否则 Windows PowerShell 5.1 读错中文。
 param([string]$UserHome = $HOME, [string]$BackupRoot, [int]$KeepDays = 7, [switch]$Schedule,
@@ -34,7 +35,11 @@ function Restore-Skill {
   if ($tracked.Count -eq 0) { return }
   $deleted = @(& git -C $Repo -c core.quotepath=false diff --name-only --diff-filter=D HEAD -- skill)
   $noEntry = -not (Test-Path -LiteralPath (Join-Path $Repo 'skill\SKILL.md'))
-  if ($deleted.Count -eq 0 -or (-not $noEntry -and $deleted.Count * 2 -lt $tracked.Count)) { return }
+  # skill/ 里有没跟踪的新文件 = 有人在挪文件重构（普通移动 git 只看到旧路径被删），只补回入口 SKILL.md
+  $untracked = @(& git -C $Repo ls-files --others --exclude-standard -- skill)
+  if ($untracked.Count -gt 0) { $deleted = @($deleted | Where-Object { $_ -eq 'skill/SKILL.md' }) }
+  elseif (-not $noEntry -and $deleted.Count * 2 -lt $tracked.Count) { return }
+  if ($deleted.Count -eq 0) { return }
   & git -C $Repo restore --source=HEAD --staged --worktree -- $deleted
   if ($LASTEXITCODE -ne 0) { throw "git restore 失败，skill/ 仍缺 $($deleted.Count) 个文件" }
   $line = '{0} 恢复 skill/ 被删的 {1}/{2} 个文件：{3}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $deleted.Count, $tracked.Count, ($deleted -join '、')

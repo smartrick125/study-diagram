@@ -71,9 +71,24 @@ def main():
 
         # 5. 没东西可恢复时重跑不再动
         assert "RESTORED" not in run(tmp, repo)
+
+        # 6. 普通移动（不是 git mv）一半以上的文件、没提交：当作重构，不把旧文件放回来
+        git(repo, "checkout", "-q", "--", "skill")
+        new = skill / "新模块"
+        new.mkdir()
+        for rel in ("modules/路线.md", "modules/时序.md", "scripts/render.py"):
+            shutil.move(str(skill / rel), str(new / pathlib.Path(rel).name))
+        out = run(tmp, repo)
+        assert "RESTORED" not in out and not (skill / "modules" / "路线.md").exists(), "重构中的旧文件被放回来了"
+
+        # 7. 重构中连 SKILL.md 也丢了：只补回 SKILL.md，挪走的文件不放回旧位置
+        (skill / "SKILL.md").unlink()
+        run(tmp, repo)
+        assert (skill / "SKILL.md").exists(), "SKILL.md 没恢复"
+        assert not (skill / "modules" / "路线.md").exists(), "重构中的旧文件被放回来了"
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print("ok   防删空 5 项通过")
+    print("ok   防删空 7 项通过")
 
 
 if __name__ == "__main__":
