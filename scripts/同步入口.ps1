@@ -5,7 +5,7 @@
 #   先做防删空：正本是 git 仓库时，skill/SKILL.md 不见了、或 skill/ 里一半以上已提交的文件被删，
 #   就用 git 把被删的文件恢复成最新提交的样子（只恢复被删的，别的改动不动），并记日志。删得少当作正常删改，不恢复。
 #   skill/ 里有没跟踪的新文件时当作正在挪文件重构，只补回 SKILL.md。重构 skill/ 请用 git mv 或尽快提交。
-#   -Schedule：注册 Windows 定时任务「study-diagram 入口同步」，登录时跑一次，之后每小时跑一次。
+#   -Schedule：注册 Windows 定时任务「study-diagram 入口同步」，登录时跑一次，之后每 12 小时跑一次（不经过 AI，不花 token）。
 # 注意：本文件必须保存为 UTF-8 带 BOM，否则 Windows PowerShell 5.1 读错中文。
 param([string]$UserHome = $HOME, [string]$BackupRoot, [int]$KeepDays = 7, [switch]$Schedule,
       [string]$Repo = (Split-Path -Parent $PSScriptRoot), [string]$LogPath)
@@ -17,11 +17,11 @@ if ($Schedule) {
   $arg = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$PSCommandPath`""
   if ($PSBoundParameters.ContainsKey('BackupRoot')) { $arg += " -BackupRoot `"$BackupRoot`"" }
   $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $arg
-  $hourly = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval (New-TimeSpan -Hours 1)
-  $triggers = @((New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME), $hourly)
+  $repeat = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval (New-TimeSpan -Hours 12)
+  $triggers = @((New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME), $repeat)
   $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
   Register-ScheduledTask -TaskName 'study-diagram 入口同步' -Action $action -Trigger $triggers -Settings $settings -Force | Out-Null
-  Write-Output '已注册定时任务「study-diagram 入口同步」：登录时和之后每小时运行'
+  Write-Output '已注册定时任务「study-diagram 入口同步」：登录时和之后每 12 小时运行'
   exit 0
 }
 
